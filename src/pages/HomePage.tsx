@@ -2,6 +2,7 @@ import { BluetoothConnected, Cloud, LogOut, Power, Smartphone } from 'lucide-rea
 import { useAppStore } from '../store/useAppStore';
 import { formatDateTime } from '../utils/format';
 import { StatCard } from '../components/StatCard';
+import { InstallPrompt } from '../components/InstallPrompt';
 
 export function HomePage() {
   const { user, logout, connect, disconnect, connectionStatus, connectedDevice, activeSession, lastSync, online, feedback, settings } = useAppStore();
@@ -30,6 +31,8 @@ export function HomePage() {
           Este dispositivo/navegador nao suporta conexao Bluetooth BLE via PWA. No iOS pode ser necessario usar uma versao app/hibrida com suporte nativo ao Bluetooth.
         </div>
       )}
+
+      <InstallPrompt />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Bluetooth" value={connectionStatus} detail={settings.demoMode ? 'Modo demonstracao ativo' : 'Web Bluetooth real'} icon={<BluetoothConnected className="h-5 w-5" />} />

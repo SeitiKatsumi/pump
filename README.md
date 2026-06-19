@@ -28,6 +28,12 @@ pnpm build
 
 O repositorio inclui `captain-definition`, `Dockerfile` e `nginx.conf`. No CapRover, aponte o app para o repositorio e use deploy por Dockerfile. Nao e necessario configurar Diretorio Persistente para esta PWA estatica.
 
+## Instalacao PWA e tela cheia
+
+O manifest usa `display: "fullscreen"` e `display_override` para abrir como app em tela cheia quando instalado. A tela inicial tambem captura o evento `beforeinstallprompt` em navegadores compativeis e mostra o botao `Instalar app`.
+
+No Android Chrome/Edge, o navegador pode demorar alguns segundos ou exigir uma visita valida em HTTPS antes de mostrar o prompt de instalacao. Se o botao ainda nao aparecer, use o menu do navegador e escolha `Instalar app` ou `Adicionar a tela inicial`.
+
 ## Configuracao BLE
 
 Os UUIDs em `src/services/settingsService.ts` sao placeholders:
