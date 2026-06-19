@@ -69,6 +69,7 @@ export interface UsageSession {
 export interface AppSettings {
   id: 'app-settings';
   deviceName: string;
+  bleNamePrefix: string;
   bleServiceUuid: string;
   bleCharacteristicUuid: string;
   extraActionLabel: string;

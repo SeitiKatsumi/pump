@@ -38,6 +38,10 @@ export function SettingsPage() {
             <input className="field-input" value={draft.deviceName} onChange={(event) => update('deviceName', event.target.value)} />
           </label>
           <label className="field-label">
+            Prefixo do nome BLE
+            <input className="field-input" value={draft.bleNamePrefix} onChange={(event) => update('bleNamePrefix', event.target.value)} placeholder="Ex.: Pump, HM-10, ESP32" />
+          </label>
+          <label className="field-label">
             Nome da acao "xx"
             <input className="field-input" value={draft.extraActionLabel} onChange={(event) => update('extraActionLabel', event.target.value)} />
           </label>
@@ -88,7 +92,7 @@ export function SettingsPage() {
       </section>
 
       <section className="rounded-md border border-field-100 bg-white p-5 text-sm text-field-700 shadow-sm">
-        Os UUIDs atuais sao placeholders. Substitua pelos UUIDs reais do firmware/equipamento antes do uso com BLE real.
+        Para o seletor do Chrome listar o aparelho, o equipamento precisa estar anunciando BLE. Se o nome aparecer diferente, deixe o prefixo vazio para buscar qualquer dispositivo BLE proximo. Os UUIDs atuais sao placeholders; substitua pelos UUIDs reais do firmware/equipamento antes do envio de comandos.
       </section>
     </div>
   );

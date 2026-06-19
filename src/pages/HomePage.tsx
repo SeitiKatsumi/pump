@@ -7,6 +7,10 @@ import { InstallPrompt } from '../components/InstallPrompt';
 export function HomePage() {
   const { user, logout, connect, disconnect, connectionStatus, connectedDevice, activeSession, lastSync, online, feedback, settings } = useAppStore();
   const unsupported = connectionStatus === 'unsupported';
+  const secureContext = window.isSecureContext;
+  const browserHasBluetooth = 'bluetooth' in navigator;
+  const hasUuid = (value: string) => value.trim().length > 0 && !value.trim().startsWith('00000000');
+  const uuidConfigured = hasUuid(settings.bleServiceUuid) && hasUuid(settings.bleCharacteristicUuid);
 
   return (
     <div className="space-y-5 pb-24 md:pb-0">
@@ -30,6 +34,21 @@ export function HomePage() {
         <div className="rounded-md border border-red-200 bg-red-50 p-4 text-red-800">
           Este dispositivo/navegador nao suporta conexao Bluetooth BLE via PWA. No iOS pode ser necessario usar uma versao app/hibrida com suporte nativo ao Bluetooth.
         </div>
+      )}
+
+      {!settings.demoMode && (
+        <section className="rounded-md border border-field-100 bg-white p-4 shadow-sm">
+          <h2 className="text-lg font-semibold">Checklist BLE real</h2>
+          <div className="mt-3 grid gap-2 text-sm md:grid-cols-2">
+            <div className="info-row"><span>HTTPS ativo</span><strong>{secureContext ? 'sim' : 'nao'}</strong></div>
+            <div className="info-row"><span>Web Bluetooth</span><strong>{browserHasBluetooth ? 'disponivel' : 'indisponivel'}</strong></div>
+            <div className="info-row"><span>Filtro por nome</span><strong>{settings.bleNamePrefix || 'qualquer BLE'}</strong></div>
+            <div className="info-row"><span>UUIDs reais</span><strong>{uuidConfigured ? 'configurados' : 'pendentes'}</strong></div>
+          </div>
+          <p className="mt-3 text-sm text-field-700">
+            O seletor do Chrome mostra apenas dispositivos BLE anunciando no momento. Dispositivo pareado no Android, mas sem advertising BLE ativo, nao aparece nessa lista.
+          </p>
+        </section>
       )}
 
       <InstallPrompt />

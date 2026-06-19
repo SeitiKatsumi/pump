@@ -5,13 +5,13 @@ import { COMMAND_DESCRIPTIONS, COMMAND_LABELS } from '../constants/commands';
 import { useAppStore } from '../store/useAppStore';
 import type { CommandCode } from '../types';
 
-const commandButtons: Array<{ command: CommandCode; icon: React.ComponentType<{ className?: string }>; tone: string }> = [
-  { command: 'ss', icon: ArrowUp, tone: 'bg-emerald-700 hover:bg-emerald-800' },
-  { command: 'dd', icon: ArrowDown, tone: 'bg-sky-700 hover:bg-sky-800' },
-  { command: 'cc', icon: Play, tone: 'bg-field-900 hover:bg-black' },
-  { command: 'pp', icon: Pause, tone: 'bg-amber-600 hover:bg-amber-700' },
-  { command: 'xx', icon: ShieldAlert, tone: 'bg-steel hover:bg-slate-800' },
-  { command: 'rr', icon: RotateCcw, tone: 'bg-safety hover:bg-red-800' },
+const commandButtons: Array<{ command: CommandCode; icon: React.ComponentType<{ className?: string }>; tone: string; layout: string; variant?: 'main' | 'normal' | 'critical' }> = [
+  { command: 'ss', icon: ArrowUp, tone: 'bg-emerald-700 hover:bg-emerald-800', layout: 'col-span-2', variant: 'main' },
+  { command: 'cc', icon: Play, tone: 'bg-field-900 hover:bg-black', layout: '', variant: 'normal' },
+  { command: 'pp', icon: Pause, tone: 'bg-amber-600 hover:bg-amber-700', layout: '', variant: 'normal' },
+  { command: 'dd', icon: ArrowDown, tone: 'bg-sky-700 hover:bg-sky-800', layout: 'col-span-2', variant: 'main' },
+  { command: 'xx', icon: ShieldAlert, tone: 'bg-steel hover:bg-slate-800', layout: '', variant: 'critical' },
+  { command: 'rr', icon: RotateCcw, tone: 'bg-safety hover:bg-red-800', layout: '', variant: 'critical' },
 ];
 
 export function ControlPage() {
@@ -45,19 +45,22 @@ export function ControlPage() {
         </div>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {commandButtons.map(({ command, icon: Icon, tone }) => {
+      <section className="controller-panel">
+        {commandButtons.map(({ command, icon: Icon, tone, layout, variant }) => {
           const label = command === 'xx' ? settings.extraActionLabel : COMMAND_LABELS[command];
           return (
             <button
               key={command}
-              className={`control-button ${tone}`}
+              className={`control-button ${tone} ${layout} ${variant === 'main' ? 'control-button-main' : ''} ${variant === 'critical' ? 'control-button-critical' : ''}`}
               disabled={!canSend || busyCommand === command}
               onClick={() => void handleCommand(command)}
+              aria-label={`${label} comando ${command}`}
             >
-              <Icon className="h-8 w-8" />
-              <span className="text-2xl font-semibold">{label}</span>
-              <span className="text-sm opacity-90">"{command}" - {COMMAND_DESCRIPTIONS[command]}</span>
+              <span className="grid place-items-center gap-2">
+                <Icon className={`${variant === 'main' ? 'h-12 w-12' : 'h-9 w-9'} shrink-0`} />
+                <span className={`${variant === 'main' ? 'text-3xl' : 'text-xl'} font-semibold leading-none`}>{label}</span>
+                <span className="rounded bg-white/16 px-2 py-1 font-mono text-xs uppercase tracking-normal">"{command}"</span>
+              </span>
             </button>
           );
         })}
@@ -65,6 +68,13 @@ export function ControlPage() {
 
       <div className="rounded-md border border-field-100 bg-white p-4 text-sm text-field-700">
         Feedback: <strong className="text-field-900">{feedback ?? 'Nenhum comando enviado nesta tela'}</strong>
+        <div className="mt-3 grid gap-2 md:grid-cols-3">
+          {commandButtons.map(({ command }) => (
+            <span key={command} className="rounded bg-field-50 px-3 py-2">
+              "{command}" - {command === 'xx' ? settings.extraActionLabel : COMMAND_DESCRIPTIONS[command]}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );

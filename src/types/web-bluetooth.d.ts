@@ -20,11 +20,13 @@ interface BluetoothRemoteGATTCharacteristic {
 }
 
 interface Bluetooth {
-  requestDevice(options: {
-    acceptAllDevices?: boolean;
-    optionalServices?: string[];
-    filters?: Array<{ services?: string[]; name?: string; namePrefix?: string }>;
-  }): Promise<BluetoothDevice>;
+  requestDevice(options: RequestDeviceOptions): Promise<BluetoothDevice>;
+}
+
+interface RequestDeviceOptions {
+  acceptAllDevices?: boolean;
+  optionalServices?: string[];
+  filters?: Array<{ services?: string[]; name?: string; namePrefix?: string }>;
 }
 
 interface Navigator {
